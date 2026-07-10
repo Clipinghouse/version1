@@ -196,15 +196,17 @@ export default function CampaignsClient({ initialCampaigns }: { initialCampaigns
                     return;
                 }
                 const cat = await createContextCategory(newCategoryName, "");
-                setCategories(prev => [...prev, cat]);
-                targetCategoryId = cat.id;
+                if (cat) setCategories(prev => [...prev, { id: cat.id, name: cat.name }]);
+                targetCategoryId = cat?.id ?? "";
             } else if (selectedCategoryId === "PASS") {
                 let cat = categories.find(c => c.name === "no category context");
                 if (!cat) {
-                    cat = await createContextCategory("no category context", "");
-                    setCategories(prev => [...prev, cat]);
+                    const newCat = await createContextCategory("no category context", "");
+                    if (newCat) setCategories(prev => [...prev, { id: newCat.id, name: newCat.name }]);
+                    targetCategoryId = newCat?.id ?? "";
+                } else {
+                    targetCategoryId = cat.id;
                 }
-                targetCategoryId = cat.id;
             }
 
             const newItem = await createContextItem(targetCategoryId, newContextName, newContextText);
