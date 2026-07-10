@@ -1,0 +1,77 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id           String   @id @default(cuid())
+  name         String
+  rpm          String?    
+  platform     String?
+  sound        String?
+  niche        String?
+  rules        String?    @db.Text
+  customFields Json?      
+  
+  isCompleted  Boolean    @default(false)
+  clips        Int?       
+  earned       Decimal?   
+  views        Int?       
+
+  lastExport   String?    @db.Text
+
+  contexts     ContextItem[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ContextCategory {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+
+  items       ContextItem[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContextItem {
+  id          String   @id @default(cuid())
+  name        String
+  text        String   @db.Text
+
+  categoryId  String
+  category    ContextCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  campaigns   Campaign[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+model StoredContent {
+  id          String   @id @default(cuid())
+  title       String
+  body        String   @db.Text
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DailyTimer {
+  id            String    @id @default(cuid())
+  date          String    @unique
+  seconds       Int       @default(0)
+  isRunning     Boolean   @default(false)
+  lastStartedAt DateTime?
+  updatedAt     DateTime  @updatedAt
+}
