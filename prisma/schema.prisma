@@ -21,7 +21,7 @@ model Campaign {
   isCompleted  Boolean    @default(false)
   clips        Int?       
   earned       Decimal?   
-  views        Int?       
+  views        String?       
 
   lastExport   String?    @db.Text
 

@@ -33,7 +33,34 @@ export async function POST(req: NextRequest) {
             ? campaign.contexts.map(c => `### ${c.name}\n${c.text}`).join("\n\n")
             : "No context items linked.";
 
-        const prompt = `You are an expert campaign manager delegating tasks. Write a direct, comprehensive system prompt that I can copy and paste to another AI (or content creator) who will be executing this campaign. 
+        let prompt = "";
+        if (campaign.isCompleted) {
+            prompt = `You are an expert campaign analyst evaluating a completed campaign. Write a summary detailing that we did this campaign and these were the results.
+
+The output MUST:
+1. State that the campaign has concluded.
+2. Summarize the performance results using the provided stats (clips, earnings, views).
+3. Mention the relevant context if applicable.
+4. Be written as a cohesive professional debrief or post-mortem.
+
+## Campaign: ${campaign.name}
+**Platform:** ${campaign.platform || "Not specified"}
+**Niche:** ${campaign.niche || "Not specified"}
+**Clips Uploaded:** ${campaign.clips || 0}
+**Earned:** $${campaign.earned || 0}
+**Views:** ${campaign.views || "0"}
+
+**Original Rules & Guidelines:**
+${campaign.rules || "No rules specified."}
+
+${customFields ? `**Custom Fields:**\n${customFields}` : ""}
+
+## Linked Context
+${contextSection}
+
+Generate ONLY the summary of the results.`;
+        } else {
+            prompt = `You are an expert campaign manager delegating tasks. Write a direct, comprehensive system prompt that I can copy and paste to another AI (or content creator) who will be executing this campaign. 
 
 The output prompt you generate MUST:
 1. Start by explicitly stating that we are embarking on a newly launched campaign.
@@ -57,6 +84,7 @@ ${customFields ? `**Custom Fields:**\n${customFields}` : ""}
 ${contextSection}
 
 Generate ONLY the prompt that will be passed on.`;
+        }
 
         // Call OpenRouter
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

@@ -20,7 +20,7 @@ interface Campaign {
     isCompleted: boolean;
     clips: number | null;
     earned: number | null;
-    views: number | null;
+    views: string | null;
     lastExport: string | null;
     contexts: ContextItem[];
 }
@@ -30,7 +30,7 @@ function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick: () =
     return (
         <div className={`dc-card ${campaign.isCompleted ? 'dc-completed' : ''}`} onClick={onClick}>
             {campaign.isCompleted ? (
-                <div className="dc-love" style={{ fontSize: "0.55rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 800, color: "rgba(255,255,255,0.5)", background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "12px", padding: "2px 8px", zIndex: 10, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>COMPLETED</div>
+                <div className="dc-love" style={{ fontSize: "0.55rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 800, color: "rgba(255,255,255,0.5)", background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "12px", padding: "2px 8px", zIndex: 10, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>COMPLETED <span>❤️</span></div>
             ) : (
                 <div className="dc-live-emoji" style={{ fontSize: "0.55rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 900, color: "#000", background: "#00ff00", border: "none", borderRadius: "12px", padding: "2px 8px", zIndex: 10, display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 10px rgba(0, 255, 0, 0.4)" }}>ACTIVE</div>
             )}
@@ -600,8 +600,8 @@ ${contextSection}`;
                                                         <input className="dc-stat-input" placeholder="Money Earned ($)" value={earned} onChange={e => setEarned(e.target.value)} />
                                                         <input className="dc-stat-input" placeholder="Total Views" value={views} onChange={e => setViews(e.target.value)} />
                                                         <button className="dc-submit-btn" onClick={async () => {
-                                                            const updated = await completeCampaign(activeCampaign.id, parseInt(clips || "0"), parseFloat(earned || "0"), parseInt(views || "0"));
-                                                            setCampaigns(prev => prev.map(c => c.id === updated.id ? { ...c, isCompleted: true, clips: parseInt(clips || "0"), earned: parseFloat(earned || "0"), views: parseInt(views || "0") } : c));
+                                                            const updated = await completeCampaign(activeCampaign.id, parseInt(clips || "0"), parseFloat(earned || "0"), views || "0");
+                                                            setCampaigns(prev => prev.map(c => c.id === updated.id ? { ...c, isCompleted: true, clips: parseInt(clips || "0"), earned: parseFloat(earned || "0"), views: views || "0" } : c));
                                                             setShowForm(false);
                                                         }}>Submit</button>
                                                     </div>

@@ -92,7 +92,7 @@ export async function createCampaign(data: any) {
     return { ...campaign, earned: campaign.earned ? Number(campaign.earned) : null };
 }
 
-export async function completeCampaign(id: string, clips: number, earned: number, views: number) {
+export async function completeCampaign(id: string, clips: number, earned: number, views: string) {
     const campaign = await prisma.campaign.update({
         where: { id },
         data: { isCompleted: true, clips, earned, views },
