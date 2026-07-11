@@ -54,6 +54,16 @@ export async function createContextItem(categoryId: string, name: string, text: 
     return item;
 }
 
+export async function deleteContextCategory(id: string) {
+    await prisma.contextCategory.delete({ where: { id } });
+    revalidatePath("/context");
+}
+
+export async function deleteContextItem(id: string) {
+    await prisma.contextItem.delete({ where: { id } });
+    revalidatePath("/context");
+}
+
 // Lightweight list for picker — only id + name, no body text
 export async function getContextItemsForPicker() {
     return prisma.contextItem.findMany({

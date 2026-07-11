@@ -10,7 +10,7 @@ const BUBBLES = [
     "linear-gradient(135deg, #8ba8ff 0%, #587bff 100%)"
 ];
 
-import { createContextCategory, createContextItem } from "../actions";
+import { createContextCategory, createContextItem, deleteContextCategory, deleteContextItem } from "../actions";
 
 interface ContextItem { id: string; name: string; text: string; categoryId: string; }
 interface Category { id: string; name: string; description: string | null; items: ContextItem[]; }
@@ -64,6 +64,22 @@ export default function ContextClient({ initialCategories }: { initialCategories
         setNewContextName("");
         setNewContextText("");
         setAddingContextId(null);
+    };
+
+    const handleDeleteCategory = async (catId: string) => {
+        if (!confirm("Are you sure you want to delete this category?")) return;
+        await deleteContextCategory(catId);
+        setCategories(prev => prev.filter(c => c.id !== catId));
+    };
+
+    const handleDeleteContext = async (catId: string, ctxId: string) => {
+        if (!confirm("Are you sure you want to delete this context?")) return;
+        await deleteContextItem(ctxId);
+        setCategories(prev => prev.map(c =>
+            c.id === catId
+                ? { ...c, items: c.items.filter(i => i.id !== ctxId) }
+                : c
+        ));
     };
 
     const filteredCategories = categories.filter(cat =>
@@ -151,9 +167,20 @@ export default function ContextClient({ initialCategories }: { initialCategories
                                 {/* Category header */}
                                 <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                        <h3 style={{ fontFamily: "var(--font-anton)", fontSize: "2rem", color: "#fff", margin: 0, letterSpacing: "0.02em", textTransform: "uppercase" }}>
-                                            {cat.name}
-                                        </h3>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <h3 style={{ fontFamily: "var(--font-anton)", fontSize: "2rem", color: "#fff", margin: 0, letterSpacing: "0.02em", textTransform: "uppercase" }}>
+                                                {cat.name}
+                                            </h3>
+                                            <button
+                                                onClick={() => handleDeleteCategory(cat.id)}
+                                                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.2)", cursor: "pointer", padding: "4px", transition: "color 0.2s", display: "flex", alignItems: "center" }}
+                                                onMouseEnter={e => e.currentTarget.style.color = "#ff6b6b"}
+                                                onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.2)"}
+                                                title="Delete Category"
+                                            >
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                            </button>
+                                        </div>
                                         {cat.description && (
                                             <div>
                                                 <button
@@ -170,12 +197,14 @@ export default function ContextClient({ initialCategories }: { initialCategories
                                             </div>
                                         )}
                                     </div>
-                                    <button
-                                        className="campaign-add-btn neutral"
-                                        onClick={() => { setAddingContextId(cat.id); setNewContextText(""); }}
-                                    >
-                                        + Add Context
-                                    </button>
+                                    <div>
+                                        <button
+                                            className="campaign-add-btn neutral"
+                                            onClick={() => { setAddingContextId(cat.id); setNewContextText(""); }}
+                                        >
+                                            + Add Context
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Inline input for adding context */}
@@ -211,9 +240,20 @@ export default function ContextClient({ initialCategories }: { initialCategories
                                     ) : (
                                         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                                             {cat.items.map(ctx => (
-                                                <div key={ctx.id} style={{ padding: "14px 18px", background: "rgba(255,255,255,0.04)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)", fontFamily: "var(--font-sans)" }}>
-                                                    <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#ffd700", fontWeight: 700, marginBottom: 6 }}>{ctx.name}</div>
-                                                    <div style={{ color: "#e0e0e0", fontSize: "0.95rem", lineHeight: 1.5 }}>{ctx.text}</div>
+                                                <div key={ctx.id} style={{ padding: "14px 18px", background: "rgba(255,255,255,0.04)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)", fontFamily: "var(--font-sans)", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                                                    <div>
+                                                        <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#ffd700", fontWeight: 700, marginBottom: 6 }}>{ctx.name}</div>
+                                                        <div style={{ color: "#e0e0e0", fontSize: "0.95rem", lineHeight: 1.5 }}>{ctx.text}</div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleDeleteContext(cat.id, ctx.id)}
+                                                        style={{ background: "none", border: "none", color: "rgba(255,255,255,0.2)", cursor: "pointer", padding: "4px", transition: "color 0.2s", display: "flex", alignItems: "center", alignSelf: "flex-start", marginTop: "-2px" }}
+                                                        onMouseEnter={e => e.currentTarget.style.color = "#ff6b6b"}
+                                                        onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.2)"}
+                                                        title="Delete Context"
+                                                    >
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
@@ -225,6 +265,6 @@ export default function ContextClient({ initialCategories }: { initialCategories
 
                 </div>
             </main>
-        </AppShell>
+        </AppShell >
     );
 }
