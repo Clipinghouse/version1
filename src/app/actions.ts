@@ -121,7 +121,11 @@ export async function unlinkContextFromCampaign(campaignId: string, contextItemI
 }
 
 export async function deleteCampaign(id: string) {
-    await prisma.campaign.delete({ where: { id } });
+    try {
+        await prisma.campaign.delete({ where: { id } });
+    } catch (e) {
+        // Record might not exist, safely ignore
+    }
     revalidatePath("/campaigns");
 }
 
