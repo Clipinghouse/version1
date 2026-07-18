@@ -15,13 +15,11 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
-    // Not logged in → redirect to login using the public NEXTAUTH_URL
-    // so Render's internal port (10000) never leaks into the callbackUrl
+    // Not logged in → redirect cleanly to /login with no callbackUrl
+    // (avoids Render's internal localhost:10000 leaking into the URL)
     if (!token) {
-        const base = process.env.NEXTAUTH_URL || request.nextUrl.origin;
-        const loginUrl = new URL("/login", base);
-        loginUrl.searchParams.set("callbackUrl", new URL(pathname, base).toString());
-        return NextResponse.redirect(loginUrl);
+        const base = process.env.NEXTAUTH_URL?.replace(/\/$/, "") || `https://${request.headers.get("host")}`;
+        return NextResponse.redirect(`${base}/login`);
     }
 
     return NextResponse.next();
