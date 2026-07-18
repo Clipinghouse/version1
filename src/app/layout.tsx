@@ -11,6 +11,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import AuthProvider from "./components/AuthProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

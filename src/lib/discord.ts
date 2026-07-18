@@ -120,7 +120,10 @@ export async function notifyDiscordNewContextCategory(payload: ContextCategoryPa
     const token = process.env.DISCORD_BOT_TOKEN;
     const channelId = process.env.DISCORD_CAMPAIGNS_CHANNEL_ID;
 
-    if (!token || !channelId) return null; // silently skip if not configured
+    if (!token || !channelId) {
+        console.warn("[Discord] Campaign notification skipped — missing BOT_TOKEN or CAMPAIGNS_CHANNEL_ID");
+        return null;
+    }
 
     // ── Build context block ──────────────────────────────────────────────
     let contextBlock = "";
@@ -258,6 +261,8 @@ export async function notifyDiscordNewContextCategory(payload: ContextCategoryPa
             const threadData = await threadRes.json();
             const threadUrl = `https://discord.com/channels/${threadData.guild_id}/${threadData.id}`;
             return threadUrl;
+        } else {
+            console.error(`[Discord] Thread creation failed ${threadRes.status}:`, await threadRes.text());
         }
 
         return null;
