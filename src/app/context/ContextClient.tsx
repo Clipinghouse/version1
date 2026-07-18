@@ -178,8 +178,8 @@ export default function ContextClient({ initialCategories, identities }: { initi
                                                 <button type="button" onClick={async () => {
                                                     if (confirm("Delete this identity?")) {
                                                         await deleteIdentity(catIdentityId);
-                                                        setIdentities(prev => prev.filter(i => i.id !== catIdentityId));
                                                         setCatIdentityId("");
+                                                        router.refresh();
                                                     }
                                                 }} style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", background: "transparent", color: "#fff", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s", padding: 0 }} onMouseOver={e => { e.currentTarget.style.color = "#ff4444"; }} onMouseOut={e => { e.currentTarget.style.color = "#fff"; }} title="Delete Selected Identity">
                                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
