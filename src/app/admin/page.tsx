@@ -234,14 +234,14 @@ export default async function AdminPage() {
                             )}
                             {discordUsers.map((user: any) => (
                                 <div key={user.id} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", padding: "16px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                                        <img src={user.image || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name?.replace(/ /g, '') || 'User'}`} alt={user.name || "User"} style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
-                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "16px", minWidth: 0, flex: 1 }}>
+                                        <img src={user.image || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name?.replace(/ /g, '') || 'User'}`} alt={user.name || "User"} style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
+                                        <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
                                             <span style={{ fontSize: "1rem", fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                                                 {user.name || "Unknown User"}
                                                 {session?.user?.email === user.email && <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.05em", padding: "2px 8px", borderRadius: "4px", background: "rgba(255,215,0,0.15)", color: "#ffd700", border: "1px solid rgba(255,215,0,0.3)" }}>YOU (ACTIVE)</span>}
                                             </span>
-                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>{user.email}</span>
+                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block", maxWidth: "100%" }}>{user.email}</span>
                                         </div>
                                     </div>
                                     <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
