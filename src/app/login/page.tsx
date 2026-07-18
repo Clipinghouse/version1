@@ -79,17 +79,20 @@ function LoginContent() {
                 </p>
 
                 {error === "AccessDenied" && (
-                    <div style={{
-                        background: "rgba(255, 68, 68, 0.1)",
-                        border: "1px solid rgba(255, 68, 68, 0.2)",
-                        color: "#ff6b6b",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        marginBottom: "24px",
-                        fontSize: "0.85rem",
-                        fontWeight: 500
-                    }}>
+                    <div style={{ background: "rgba(255, 68, 68, 0.1)", border: "1px solid rgba(255, 68, 68, 0.2)", color: "#ff6b6b", padding: "12px", borderRadius: "8px", marginBottom: "24px", fontSize: "0.85rem", fontWeight: 500 }}>
                         Unauthorized account.
+                    </div>
+                )}
+                {error === "OAuthCallback" && (
+                    <div style={{ background: "rgba(255, 215, 0, 0.1)", border: "1px solid rgba(255, 215, 0, 0.3)", color: "#ffd700", padding: "14px", borderRadius: "8px", marginBottom: "24px", fontSize: "0.85rem", fontWeight: 500, textAlign: "left" }}>
+                        <div style={{ fontWeight: 700, marginBottom: "8px" }}>Discord OAuth Failed ⚠️</div>
+                        Your Discord Developer Portal is improperly configured. <br /><br />
+                        Make sure <strong>{process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/auth/callback/discord</strong> is strictly added into your Developer Portal Redirect URIs.
+                    </div>
+                )}
+                {error && error !== "AccessDenied" && error !== "OAuthCallback" && (
+                    <div style={{ background: "rgba(68, 68, 255, 0.1)", border: "1px solid rgba(68, 68, 255, 0.2)", color: "#8888ff", padding: "12px", borderRadius: "8px", marginBottom: "24px", fontSize: "0.85rem", fontWeight: 500 }}>
+                        Authentication Error: {error}
                     </div>
                 )}
 
