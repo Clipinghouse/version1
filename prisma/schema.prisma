@@ -79,3 +79,12 @@ model Identity {
   campaigns         Campaign[]
   contextCategories ContextCategory[]
 }
+
+model DiscordUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

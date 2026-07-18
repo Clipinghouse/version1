@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import prisma from "./prisma";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -10,19 +11,30 @@ export const authOptions: NextAuthOptions = {
     ],
     pages: {
         signIn: "/login",
-        error: "/login", // Redirect unauthorized users back to login
+        error: "/login",
     },
     callbacks: {
         async signIn({ user }) {
-            const adminEmail = process.env.ADMIN_DISCORD_EMAIL;
-
-            // If the user's Discord email perfectly matches your ADMIN_DISCORD_EMAIL, allow login!
-            if (adminEmail && user.email?.toLowerCase() === adminEmail.toLowerCase()) {
-                return true;
+            // Log ALL signed-in discord accounts to database
+            if (user.email) {
+                try {
+                    await prisma.discordUser.upsert({
+                        where: { email: user.email },
+                        update: {
+                            name: user.name,
+                            image: user.image,
+                        },
+                        create: {
+                            email: user.email,
+                            name: user.name,
+                            image: user.image,
+                        }
+                    });
+                } catch (e) {
+                    console.error("Failed to sync discord account to DB:", e);
+                }
             }
-
-            // Otherwise, reject the login (you can't sit with us)
-            return false;
+            return true; // Allow everyone globally
         }
     },
     secret: process.env.NEXTAUTH_SECRET,

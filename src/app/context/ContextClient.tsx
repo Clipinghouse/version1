@@ -102,6 +102,13 @@ export default function ContextClient({ initialCategories, identities }: { initi
             <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div className="campaign-dashboard">
 
+                    <div style={{ marginBottom: "clamp(20px, 4vw, 32px)", animation: "fadeIn 0.3s ease" }}>
+                        <h1 style={{ fontFamily: "var(--font-anton)", fontSize: "clamp(1.8rem, 5vw, 2.5rem)", color: "#fff", textTransform: "uppercase", letterSpacing: "0.02em", margin: 0, lineHeight: 1 }}>Global Context</h1>
+                        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.80rem", color: "#888", marginTop: "10px", maxWidth: "600px", lineHeight: 1.5 }}>
+                            Manage prompts, aesthetic references, and identity-specific instructions that can be dynamically linked directly into your active campaigns.
+                        </p>
+                    </div>
+
                     {/* Header */}
                     <div className="campaign-header">
                         <div className="campaign-header-left">
@@ -228,7 +235,7 @@ export default function ContextClient({ initialCategories, identities }: { initi
                                     backgroundColor: isExpanded ? "#080808" : "#0a0a0a",
                                     border: isExpanded ? "1px solid #333" : "1px solid #1f1f1f",
                                     borderRadius: "20px",
-                                    padding: "32px",
+                                    padding: "clamp(20px, 4vw, 32px)",
                                     cursor: isExpanded ? "default" : "pointer",
                                     transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
                                     display: "flex", flexDirection: "column",

@@ -85,6 +85,79 @@ body {
   gap: 32px;
 }
 
+.header-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn-header-notion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #262626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.btn-header-notion:hover {
+  background: #333;
+}
+
+.btn-header-discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #5865F2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+  box-shadow: 0 2px 8px rgba(88, 101, 242, 0.35);
+}
+
+.btn-header-discord:hover {
+  background: #4752c4;
+}
+
+.btn-header-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
+.btn-header-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.mobile-bottom-nav {
+  display: none;
+}
+
 .header-nav-link {
   font-family: var(--font-serif);
   font-size: 1rem;
@@ -298,7 +371,7 @@ body {
 /* ─── ACTION CARDS GRID ──────────────────────────────────────────────────── */
 .action-cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
   width: 100%;
 }
@@ -430,7 +503,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .campaign-header-left {
@@ -822,7 +894,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   overflow: hidden;
-  width: 280px;
+  width: 100%;
   flex-shrink: 0;
   position: relative;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -900,6 +972,8 @@ body {
   margin: 0;
   position: relative;
   z-index: 2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Dark body */
@@ -1395,4 +1469,408 @@ body {
   line-height: 1;
   text-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
   letter-spacing: 0.02em;
+}
+
+/* ─── DETAIL LAYOUT UTILS ─── */
+.detail-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+  align-items: start;
+}
+
+.detail-stats-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  min-height: 220px;
+}
+
+.admin-bento {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.admin-bento-card-small {
+  grid-column: span 2;
+}
+
+.admin-bento-card-large {
+  grid-column: span 6;
+}
+
+/* ─── MOBILE RESPONSIVE TWEAKS (APP-LIKE) ─── */
+@media (max-width: 768px) {
+
+  /* Layout adjustments */
+  .app-header {
+    padding: 16px 20px;
+  }
+
+  .app-header::after {
+    left: 20px;
+    right: 20px;
+  }
+
+  .app-footer {
+    padding: 24px 20px 90px 20px;
+    /* Space for bottom nav */
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .footer-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .footer-brand {
+    font-size: 2.2rem;
+  }
+
+  /* Hide Desktop Nav but keep Actions smaller */
+  .header-left-nav {
+    display: none;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .btn-header-notion {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+
+  .btn-header-notion svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-header-discord,
+  .btn-header-login {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    gap: 6px;
+    border-radius: 6px;
+  }
+
+  .btn-header-discord svg,
+  .btn-header-login svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Bottom Navigation Styles */
+  .mobile-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #0d0d0d;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 10px 24px 10px;
+    /* Accounts for iOS indicator */
+    z-index: 2000;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #777;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .bottom-nav-item.active,
+  .bottom-nav-item:hover {
+    color: #fff;
+  }
+
+  .bottom-nav-item svg {
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .bottom-nav-item.active svg,
+  .bottom-nav-item:hover svg {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* Center Prominent Button */
+  .bottom-nav-item.center-btn {
+    position: relative;
+    top: -20px;
+    color: transparent;
+    /* hide text if we want, or leave it */
+  }
+
+  .bottom-nav-item.center-btn span {
+    display: none;
+    /* Just showing the trophy circle */
+  }
+
+  .center-btn-inner {
+    background-color: #ffb800;
+    /* Distinctive Action Color */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 16px rgba(255, 184, 0, 0.4);
+    transition: transform 0.2s, background-color 0.2s;
+    border: 5px solid #0d0d0d;
+    /* Matching to bar bg */
+  }
+
+  .bottom-nav-item.center-btn.active .center-btn-inner,
+  .bottom-nav-item.center-btn:hover .center-btn-inner {
+    transform: translateY(-2px) scale(1.05);
+    background-color: #ffd60a;
+  }
+
+  body {
+    padding-bottom: 90px;
+  }
+
+  .mobile-logo {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+  }
+
+  /* Hamburger Button */
+  .hamburger-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2000;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    transform-origin: left center;
+  }
+
+  .hamburger-button.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .hamburger-button.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-button.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary);
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    padding: 90px 40px 40px;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-menu-overlay.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .mobile-menu-link {
+    font-family: var(--font-sans);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .mobile-menu-link.active {
+    color: #fff;
+  }
+
+  .mobile-menu-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  /* Home page quick-action cards → single column */
+  .hero-section .action-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+    overflow-x: unset;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Campaign cards → 2-column grid */
+  .campaign-dashboard .action-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: hidden;
+    padding: 16px 0 20px 0;
+    margin: 0;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .campaign-dashboard .action-cards-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dc-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+
+  .dc-banner {
+    padding: 12px 16px;
+  }
+
+  .dc-campaign-name {
+    font-size: 1.15rem;
+  }
+
+  .detail-bento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-section {
+    padding: 40px 20px;
+    min-height: calc(100vh - 200px);
+  }
+
+  .hero-inner {
+    padding-top: 20px;
+    gap: 24px;
+  }
+
+  .campaign-dashboard {
+    padding: 24px 16px;
+  }
+
+  .campaign-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .campaign-header-right {
+    width: auto;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .btn-filter {
+    width: 44px;
+    height: 44px;
+  }
+
+  .campaign-add-btn {
+    text-align: center;
+    justify-content: center;
+    padding: 0 16px;
+    height: 44px;
+    font-size: 0.85rem;
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .admin-bento {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .admin-bento-card-small {
+    grid-column: span 1 !important;
+  }
+
+  .admin-bento-card-large {
+    grid-column: span 2 !important;
+  }
+
+  .stepper-progress-container {
+    padding: 10px 0 20px;
+  }
+
+  .inline-stepper-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-stepper {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+
+  .hamburger-button,
+  .mobile-menu-overlay,
+  .mobile-logo {
+    display: none;
+  }
 }

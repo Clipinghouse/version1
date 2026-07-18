@@ -37,7 +37,7 @@ function CampaignCard({ campaign, onClick }: { campaign: Campaign; onClick: () =
             )}
             <div className="dc-banner"><h2 className="dc-campaign-name">{campaign.name}</h2></div>
             <div className="dc-body">
-                <div className="dc-rpm-line">${campaign.rpm} <span>RPM</span></div>
+                <div className="dc-rpm-line">{campaign.rpm?.startsWith('$') ? campaign.rpm : `$${campaign.rpm || 0}`} <span>RPM</span></div>
                 <div className="dc-chips">
                     <span className="dc-chip">{campaign.platform || "Platform"}</span>
                     {campaign.niche && <span className="dc-chip">{campaign.niche}</span>}
@@ -472,7 +472,7 @@ ${contextSection}`;
 
                     {/* Campaign Grid */}
                     {!isCreating && !activeCampaignId && (
-                        <div style={{ padding: "32px 0 0 0", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "24px" }}>
+                        <div className="action-cards-grid" style={{ padding: "32px 0 0 0", marginTop: "12px" }}>
                             {filteredCampaigns.map(camp => (
                                 <CampaignCard key={camp.id} campaign={camp} onClick={() => { setActiveCampaignId(camp.id); setShowPicker(false); setExportText(null); setExportError(null); }} />
                             ))}
@@ -491,10 +491,10 @@ ${contextSection}`;
                             <div style={{ position: "relative", width: "100%", background: "#0a0a0a", border: "1px solid #1f1f1f", borderRadius: "24px", display: "flex", flexDirection: "column" }}>
 
                                 {/* Header Component */}
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "32px", paddingBottom: "24px", borderBottom: "1px solid #1a1a1a" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "clamp(16px, 4vw, 32px)", paddingBottom: "24px", borderBottom: "1px solid #1a1a1a" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                            <h2 style={{ fontSize: "2rem", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: "#fff" }}>{activeCampaign.name}</h2>
+                                            <h2 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: "#fff", overflowWrap: "break-word", wordBreak: "break-word" }}>{activeCampaign.name}</h2>
                                             {activeCampaign.isCompleted && (
                                                 <div title="Completed" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "24px", height: "24px", color: "#fff", background: "#333", border: "1px solid #444", borderRadius: "50%" }}>
                                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -502,7 +502,7 @@ ${contextSection}`;
                                             )}
                                         </div>
                                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                                            <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#fff", color: "#000", fontWeight: 700 }}>RPM: ${activeCampaign.rpm}</span>
+                                            <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#fff", color: "#000", fontWeight: 700 }}>RPM: {activeCampaign.rpm?.startsWith('$') ? activeCampaign.rpm : `$${activeCampaign.rpm || 0}`}</span>
                                             {activeCampaign.platform && <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#222", color: "#fff", border: "1px solid #333" }}>{activeCampaign.platform}</span>}
                                             {activeCampaign.niche && <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#222", color: "#fff", border: "1px solid #333" }}>{activeCampaign.niche}</span>}
                                             {activeCampaign.sound && <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#222", color: "#fff", border: "1px solid #333" }}>{activeCampaign.sound}</span>}
@@ -528,7 +528,7 @@ ${contextSection}`;
                                 </div>
 
                                 {/* Bento Layout */}
-                                <div style={{ padding: "32px", display: "grid", gridTemplateColumns: "1fr 340px", gap: "16px", alignItems: "start" }}>
+                                <div className="detail-bento-grid" style={{ padding: "clamp(16px, 4vw, 32px)" }}>
 
                                     {/* Left Column */}
                                     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -685,8 +685,8 @@ ${contextSection}`;
 
                                 {/* FULL WIDTH: Completed Stats Visualization */}
                                 {activeCampaign.isCompleted && (
-                                    <div style={{ padding: "0 32px 32px 32px", animation: "fadeIn 0.4s ease-out" }}>
-                                        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "16px", minHeight: "220px" }}>
+                                    <div style={{ padding: "0 clamp(16px, 4vw, 32px) clamp(16px, 4vw, 32px)", animation: "fadeIn 0.4s ease-out" }}>
+                                        <div className="detail-stats-grid">
 
                                             {/* Earnings Card (Black UI) */}
                                             <div style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)", backgroundSize: "24px 24px", backgroundColor: "#080808", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between", border: "1px solid #1f1f1f", position: "relative", overflow: "hidden" }}>

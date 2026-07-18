@@ -1,5 +1,7 @@
 import AppShell from "../components/AppShell";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -100,6 +102,22 @@ const Icons = {
 };
 
 export default async function AdminPage() {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        return (
+            <AppShell>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh", flexDirection: "column", gap: "20px", textAlign: "center", padding: "0 20px" }}>
+                    <div style={{ color: "#ff4444", marginBottom: "8px" }}>
+                        <Icons.Shield />
+                    </div>
+                    <h1 style={{ fontSize: "2.5rem", color: "#fff", fontFamily: "var(--font-anton)", textTransform: "uppercase", letterSpacing: "0.02em", margin: 0 }}>Access Denied</h1>
+                    <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sans)", fontSize: "1rem" }}>You do not have access to the dashboard's administrative systems.</p>
+                </div>
+            </AppShell>
+        );
+    }
+
     const [stats, discordStatus, envChecks] = await Promise.all([
         getStats(),
         checkDiscordBot(),
@@ -110,12 +128,33 @@ export default async function AdminPage() {
     const completionRate = stats.campaigns > 0 ? Math.round((stats.completedCampaigns / stats.campaigns) * 100) : 0;
     const missingEnvCount = envChecks.filter((e) => !e.present).length;
 
+    const discordUsersFromDb = await prisma.discordUser.findMany({
+        orderBy: { updatedAt: "desc" }
+    });
+
+    // Always include the current session user even if they haven't re-logged in since the table was created
+    const sessionEmail = session?.user?.email;
+    const sessionAlreadyInDb = discordUsersFromDb.some((u: any) => u.email === sessionEmail);
+    const discordUsers = sessionAlreadyInDb
+        ? discordUsersFromDb
+        : [
+            {
+                id: "session",
+                email: sessionEmail,
+                name: session?.user?.name,
+                image: session?.user?.image,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            ...discordUsersFromDb,
+        ];
+
     return (
         <AppShell>
             <main style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 24px 80px", flex: 1 }}>
 
                 {/* Header */}
-                <div style={{ marginBottom: "40px", display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+                <div style={{ marginBottom: "40px", display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "16px", justifyContent: "space-between" }}>
                     <div>
                         <p style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", margin: "0 0 8px" }}>System Overview</p>
                         <h1 style={{ fontSize: "2rem", fontWeight: 700, margin: 0, letterSpacing: "-0.03em" }}>Admin Panel</h1>
@@ -134,52 +173,81 @@ export default async function AdminPage() {
                 </div>
 
                 {/* Bento Grid */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gridTemplateRows: "auto", gap: "12px" }}>
+                <div className="admin-bento">
 
                     {/* Total Campaigns — wide */}
-                    <div style={{ gridColumn: "span 2", background: "linear-gradient(135deg, #111 0%, #0d0d0d 100%)", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "linear-gradient(135deg, #111 0%, #0d0d0d 100%)", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "rgba(255,255,255,0.3)", marginBottom: "16px" }}><Icons.Video /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>{stats.campaigns}</div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Total Campaigns</div>
                     </div>
 
                     {/* Active Campaigns */}
-                    <div style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255,215,0,0.07) 0%, #0d0d0d 100%)", border: "1px solid rgba(255,215,0,0.15)", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "linear-gradient(135deg, rgba(255,215,0,0.07) 0%, #0d0d0d 100%)", border: "1px solid rgba(255,215,0,0.15)", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "#ffd700", marginBottom: "16px" }}><Icons.Bolt /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em", color: "#ffd700" }}>{activeCampaigns}</div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Active Campaigns</div>
                     </div>
 
                     {/* Completion Rate */}
-                    <div style={{ gridColumn: "span 2", background: "linear-gradient(135deg, rgba(255,215,0,0.05) 0%, #0d0d0d 100%)", border: "1px solid rgba(255,215,0,0.12)", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "linear-gradient(135deg, rgba(255,215,0,0.05) 0%, #0d0d0d 100%)", border: "1px solid rgba(255,215,0,0.12)", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "#ffd700", marginBottom: "16px" }}><Icons.Check /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em", color: "#ffd700" }}>{completionRate}<span style={{ fontSize: "1.4rem" }}>%</span></div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Completion Rate</div>
                     </div>
 
                     {/* Identities */}
-                    <div style={{ gridColumn: "span 2", background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "rgba(255,255,255,0.3)", marginBottom: "16px" }}><Icons.User /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>{stats.identities}</div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Identities</div>
                     </div>
 
                     {/* Categories */}
-                    <div style={{ gridColumn: "span 2", background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "rgba(255,255,255,0.3)", marginBottom: "16px" }}><Icons.Folder /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>{stats.categories}</div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Context Categories</div>
                     </div>
 
                     {/* Context Items */}
-                    <div style={{ gridColumn: "span 2", background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "24px" }}>
+                    <div className="admin-bento-card-small" style={{ background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "clamp(16px, 3vw, 24px)" }}>
                         <div style={{ color: "rgba(255,255,255,0.3)", marginBottom: "16px" }}><Icons.File /></div>
                         <div style={{ fontSize: "2.8rem", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.04em" }}>{stats.contextItems}</div>
                         <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginTop: "8px", fontWeight: 500 }}>Context Items</div>
                     </div>
 
+                    {/* Logged In Discord Accounts */}
+                    <div className="admin-bento-card-large" style={{ background: "#0d0d0d", border: "1px solid #1f1f1f", borderRadius: "16px", padding: "24px 28px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px", fontWeight: 700, fontSize: "1rem" }}>
+                            <Icons.User /> Signed-In Discord Accounts ({discordUsers.length})
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "300px", overflowY: "auto", paddingRight: "8px" }}>
+                            {discordUsers.length === 0 && (
+                                <div style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}>No Discord accounts have signed in yet. Log out and sign in to register!</div>
+                            )}
+                            {discordUsers.map((user: any) => (
+                                <div key={user.id} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", padding: "16px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                                        <img src={user.image || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name?.replace(/ /g, '') || 'User'}`} alt={user.name || "User"} style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                                                {user.name || "Unknown User"}
+                                                {session?.user?.email === user.email && <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.05em", padding: "2px 8px", borderRadius: "4px", background: "rgba(255,215,0,0.15)", color: "#ffd700", border: "1px solid rgba(255,215,0,0.3)" }}>YOU (ACTIVE)</span>}
+                                            </span>
+                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px" }}>{user.email}</span>
+                                        </div>
+                                    </div>
+                                    <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
+                                        Last Login: {new Date(user.updatedAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Discord Bot Card */}
-                    <div style={{ gridColumn: "span 6", background: discordStatus.ok ? "#0d0d0d" : "#110000", border: `1px solid ${discordStatus.ok ? "#1f1f1f" : "rgba(255,255,255,0.15)"}`, borderRadius: "16px", overflow: "hidden" }}>
+                    <div className="admin-bento-card-large" style={{ background: discordStatus.ok ? "#0d0d0d" : "#110000", border: `1px solid ${discordStatus.ok ? "#1f1f1f" : "rgba(255,255,255,0.15)"}`, borderRadius: "16px", overflow: "hidden" }}>
                         {/* Error banner */}
                         {!discordStatus.ok && (
                             <div style={{ background: "rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "10px 24px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -195,30 +263,31 @@ export default async function AdminPage() {
                                     <Icons.Discord />
                                 </div>
                                 <div>
-                                    <div style={{ fontWeight: 700, fontSize: "1rem", display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <div style={{ fontWeight: 700, fontSize: "1rem", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px" }}>
                                         Discord Bot
                                         <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "2px 10px", borderRadius: "4px", background: discordStatus.ok ? "rgba(255,255,255,0.08)" : "transparent", color: discordStatus.ok ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.3)", border: "1px solid rgba(255,255,255,0.1)" }}>
                                             {discordStatus.ok ? "ONLINE" : "OFFLINE"}
                                         </span>
+                                        {discordStatus.latencyMs !== undefined && (
+                                            <>
+                                                <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.9rem" }}>/</span>
+                                                <span style={{ fontSize: "0.9rem", color: "#fff", display: "flex", alignItems: "baseline", gap: "2px" }}>
+                                                    {discordStatus.latencyMs}<span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)", fontWeight: 500 }}>ms</span>
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                     <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", marginTop: "3px" }}>
                                         {discordStatus.username ? `@${discordStatus.username} — ` : ""}{discordStatus.message}
                                     </div>
                                 </div>
                             </div>
-                            {discordStatus.latencyMs !== undefined && (
-                                <div style={{ textAlign: "right" }}>
-                                    <div style={{ fontSize: "1.8rem", fontWeight: 700, letterSpacing: "-0.03em", color: "#fff" }}>
-                                        {discordStatus.latencyMs}<span style={{ fontSize: "0.9rem", fontWeight: 400, color: "rgba(255,255,255,0.3)" }}>ms</span>
-                                    </div>
-                                    <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>API Latency</div>
-                                </div>
-                            )}
+                            {/* Latency is now integrated inline above for mobile responsiveness */}
                         </div>
                     </div>
 
                     {/* Env Vars Card — full width, responsive */}
-                    <div style={{ gridColumn: "span 6", background: "#0d0d0d", border: "1px solid #1a1a1a", borderRadius: "16px", overflow: "hidden" }}>
+                    <div className="admin-bento-card-large" style={{ background: "#0d0d0d", border: "1px solid #1a1a1a", borderRadius: "16px", overflow: "hidden" }}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid #1a1a1a" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "10px", fontWeight: 600, fontSize: "0.9rem", color: "rgba(255,255,255,0.7)" }}>
                                 <div style={{ color: "rgba(255,255,255,0.3)" }}><Icons.Shield /></div>
