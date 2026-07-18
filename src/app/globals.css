@@ -1760,14 +1760,14 @@ body {
     margin: 0;
   }
 
-  /* Campaign cards → 2-column grid */
+  /* Campaign cards → 1-column grid */
   .campaign-dashboard .action-cards-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     overflow-x: hidden;
     padding: 16px 0 20px 0;
     margin: 0;
-    gap: 12px;
+    gap: 16px;
     width: 100%;
   }
 
