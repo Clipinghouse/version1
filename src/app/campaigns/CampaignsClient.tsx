@@ -495,11 +495,6 @@ ${contextSection}`;
                                     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                                             <h2 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: "#fff", overflowWrap: "break-word", wordBreak: "break-word" }}>{activeCampaign.name}</h2>
-                                            {activeCampaign.isCompleted && (
-                                                <div title="Completed" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "24px", height: "24px", color: "#fff", background: "#333", border: "1px solid #444", borderRadius: "50%" }}>
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                                </div>
-                                            )}
                                         </div>
                                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                                             <span style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: "8px", background: "#fff", color: "#000", fontWeight: 700 }}>RPM: {activeCampaign.rpm?.startsWith('$') ? activeCampaign.rpm : `$${activeCampaign.rpm || 0}`}</span>

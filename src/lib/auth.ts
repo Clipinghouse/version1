@@ -13,6 +13,10 @@ export const authOptions: NextAuthOptions = {
         signIn: "/login",
         error: "/login",
     },
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
     callbacks: {
         async signIn({ user }) {
             // Log ALL signed-in discord accounts to database
