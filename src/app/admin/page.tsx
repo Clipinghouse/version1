@@ -233,19 +233,28 @@ export default async function AdminPage() {
                                 <div style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}>No Discord accounts have signed in yet. Log out and sign in to register!</div>
                             )}
                             {discordUsers.map((user: any) => (
-                                <div key={user.id} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", padding: "16px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "16px", minWidth: 0, flex: 1 }}>
-                                        <img src={user.image || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name?.replace(/ /g, '') || 'User'}`} alt={user.name || "User"} style={{ width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0 }} />
-                                        <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
-                                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                                                {user.name || "Unknown User"}
-                                                {session?.user?.email === user.email && <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.05em", padding: "2px 8px", borderRadius: "4px", background: "rgba(255,215,0,0.15)", color: "#ffd700", border: "1px solid rgba(255,215,0,0.3)" }}>YOU (ACTIVE)</span>}
-                                            </span>
-                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block", maxWidth: "100%" }}>{user.email}</span>
+                                <div key={user.id} style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "14px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
+                                    {/* Top row: avatar + name + badge */}
+                                    <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
+                                        <img src={user.image || `https://api.dicebear.com/9.x/glass/svg?seed=${user.name?.replace(/ /g, '') || 'User'}`} alt={user.name || "User"} style={{ width: "36px", height: "36px", borderRadius: "50%", flexShrink: 0 }} />
+                                        <div style={{ minWidth: 0, flex: 1 }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                                                <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>
+                                                    {user.name || "Unknown User"}
+                                                </span>
+                                                {session?.user?.email === user.email && (
+                                                    <span style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.05em", padding: "2px 6px", borderRadius: "4px", background: "rgba(255,215,0,0.15)", color: "#ffd700", border: "1px solid rgba(255,215,0,0.3)", flexShrink: 0 }}>YOU</span>
+                                                )}
+                                            </div>
+                                            {/* Email — always truncates */}
+                                            <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                {user.email}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
-                                        Last Login: {new Date(user.updatedAt).toLocaleDateString()}
+                                    {/* Bottom: last login date */}
+                                    <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.25)", paddingLeft: "48px" }}>
+                                        Last login: {new Date(user.updatedAt).toLocaleDateString()}
                                     </div>
                                 </div>
                             ))}
