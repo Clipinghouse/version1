@@ -30,9 +30,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                             {label}
                         </Link>
                     ))}
-                    <Link href="/admin" className={`header-nav-link ${pathname === "/admin" ? "active" : ""}`} style={{ color: pathname === "/admin" ? "#fff" : "rgba(255,255,255,0.35)" }}>
-                        Admin
-                    </Link>
+                    {(session?.user as any)?.isAdmin && (
+                        <Link href="/admin" className={`header-nav-link ${pathname === "/admin" ? "active" : ""}`} style={{ color: pathname === "/admin" ? "#fff" : "rgba(255,255,255,0.35)" }}>
+                            Admin
+                        </Link>
+                    )}
                 </nav>
 
                 {/* Actions (Responsive) */}
@@ -114,15 +116,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     <span>Context</span>
                 </Link>
 
-                <Link href="/admin" className={`bottom-nav-item ${pathname === "/admin" ? "active" : ""}`}>
-                    <img
-                        src={`https://api.dicebear.com/9.x/glass/svg?seed=${session?.user?.name?.replace(/ /g, '') || 'Admin'}`}
-                        alt="Admin"
-                        style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#111", border: pathname === "/admin" ? "2px solid #fff" : "1px solid rgba(255,255,255,0.3)" }}
-                        className="admin-nav-avatar"
-                    />
-                    <span>Admin</span>
-                </Link>
+                {(session?.user as any)?.isAdmin && (
+                    <Link href="/admin" className={`bottom-nav-item ${pathname === "/admin" ? "active" : ""}`}>
+                        <img
+                            src={`https://api.dicebear.com/9.x/glass/svg?seed=${session?.user?.name?.replace(/ /g, '') || 'Admin'}`}
+                            alt="Admin"
+                            style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#111", border: pathname === "/admin" ? "2px solid #fff" : "1px solid rgba(255,255,255,0.3)" }}
+                            className="admin-nav-avatar"
+                        />
+                        <span>Admin</span>
+                    </Link>
+                )}
             </nav>
         </div>
     );

@@ -35,7 +35,23 @@ export const authOptions: NextAuthOptions = {
                 }
             }
             return true; // Allow everyone globally
-        }
+        },
+        async jwt({ token, user }) {
+            // On first sign-in, stamp isAdmin onto the token
+            if (user) {
+                const adminEmail = process.env.ADMIN_DISCORD_EMAIL;
+                token.isAdmin = !!(adminEmail && user.email === adminEmail);
+                token.email = user.email;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            // Expose isAdmin to the client session
+            if (session.user) {
+                (session.user as any).isAdmin = token.isAdmin ?? false;
+            }
+            return session;
+        },
     },
     secret: process.env.NEXTAUTH_SECRET,
 };

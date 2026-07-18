@@ -104,7 +104,10 @@ const Icons = {
 export default async function AdminPage() {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    const adminEmail = process.env.ADMIN_DISCORD_EMAIL;
+    const isAdmin = !!(session?.user?.email && adminEmail && session.user.email === adminEmail);
+
+    if (!session || !isAdmin) {
         return (
             <AppShell>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh", flexDirection: "column", gap: "20px", textAlign: "center", padding: "0 20px" }}>
@@ -112,11 +115,14 @@ export default async function AdminPage() {
                         <Icons.Shield />
                     </div>
                     <h1 style={{ fontSize: "2.5rem", color: "#fff", fontFamily: "var(--font-anton)", textTransform: "uppercase", letterSpacing: "0.02em", margin: 0 }}>Access Denied</h1>
-                    <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sans)", fontSize: "1rem" }}>You do not have access to the dashboard's administrative systems.</p>
+                    <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sans)", fontSize: "1rem" }}>
+                        {!session ? "You must be logged in to view this page." : "You do not have admin privileges."}
+                    </p>
                 </div>
             </AppShell>
         );
     }
+
 
     const [stats, discordStatus, envChecks] = await Promise.all([
         getStats(),
