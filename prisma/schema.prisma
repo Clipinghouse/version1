@@ -9,62 +9,57 @@ datasource db {
 }
 
 model Campaign {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   name         String
-  rpm          String?    
-  platform     String?
-  sound        String?
+  customFields Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  clips        Int?
+  earned       Decimal?
+  isCompleted  Boolean       @default(false)
   niche        String?
-  rules        String?    @db.Text
-  customFields Json?      
-  
-  isCompleted  Boolean    @default(false)
-  clips        Int?       
-  earned       Decimal?   
-  views        String?       
-
-  lastExport   String?    @db.Text
-
-  contexts     ContextItem[]
-
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  platform     String?
+  rpm          String?
+  rules        String?
+  sound        String?
+  views        String?
+  lastExport       String?
+  discordThreadUrl String?
+  identityId       String?
+  identity         Identity?     @relation(fields: [identityId], references: [id])
+  contexts         ContextItem[] @relation("CampaignToContextItem")
 }
 
 model ContextCategory {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
-  description String?  @db.Text
-
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  description String?
+  identityId  String?
+  identity    Identity?     @relation(fields: [identityId], references: [id])
   items       ContextItem[]
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model ContextItem {
-  id          String   @id @default(cuid())
-  name        String
-  text        String   @db.Text
-
-  categoryId  String
-  category    ContextCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  campaigns   Campaign[]
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String          @id @default(cuid())
+  name       String
+  text       String
+  categoryId String
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  category   ContextCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  campaigns  Campaign[]      @relation("CampaignToContextItem")
 
   @@index([categoryId])
 }
 
 model StoredContent {
-  id          String   @id @default(cuid())
-  title       String
-  body        String   @db.Text
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model DailyTimer {
@@ -74,4 +69,13 @@ model DailyTimer {
   isRunning     Boolean   @default(false)
   lastStartedAt DateTime?
   updatedAt     DateTime  @updatedAt
+}
+
+model Identity {
+  id                String            @id @default(cuid())
+  name              String            @unique
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  campaigns         Campaign[]
+  contextCategories ContextCategory[]
 }
