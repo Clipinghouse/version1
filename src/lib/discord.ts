@@ -72,7 +72,7 @@ export async function notifyDiscordNewContextCategory(payload: ContextCategoryPa
                 inline: true,
             },
         ],
-        footer: { text: `Clipping House  ·  Context Lib  ·  ID: ${payload.id}` },
+        footer: { text: `MyClipping  ·  Context Lib  ·  ID: ${payload.id}` },
         timestamp: new Date().toISOString(),
     };
 
@@ -202,7 +202,7 @@ export async function notifyDiscordNewContextCategory(payload: ContextCategoryPa
                 : []),
         ],
         footer: {
-            text: `Clipping House  ·  ID: ${campaign.id}`,
+            text: `MyClipping  ·  ID: ${campaign.id}`,
         },
         timestamp: new Date().toISOString(),
     };
@@ -315,7 +315,7 @@ export async function notifyDiscordNewContextItem(payload: ContextItemPayload): 
                 inline: false,
             },
         ],
-        footer: { text: `Clipping House  ·  Context Lib  ·  ID: ${payload.id}` },
+        footer: { text: `MyClipping  ·  Context Lib  ·  ID: ${payload.id}` },
         timestamp: new Date().toISOString(),
     };
 

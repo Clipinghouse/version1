@@ -241,7 +241,7 @@ export default async function AdminPage() {
                                                 {user.name || "Unknown User"}
                                                 {session?.user?.email === user.email && <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.05em", padding: "2px 8px", borderRadius: "4px", background: "rgba(255,215,0,0.15)", color: "#ffd700", border: "1px solid rgba(255,215,0,0.3)" }}>YOU (ACTIVE)</span>}
                                             </span>
-                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px" }}>{user.email}</span>
+                                            <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.5)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>{user.email}</span>
                                         </div>
                                     </div>
                                     <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>

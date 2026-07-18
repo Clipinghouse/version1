@@ -21,7 +21,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             {/* ══ TOP HEADER ══════════════════════════════════════════════════════ */}
             <header className="app-header">
                 {/* Mobile Logo */}
-                <div className="mobile-logo">clipping house</div>
+                <div className="mobile-logo">myclipping</div>
 
                 {/* Desktop Nav Links */}
                 <nav className="header-left-nav">
@@ -63,14 +63,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                                 </svg>
                                 <span className="hide-on-mobile">Discord</span>
                             </a>
-                            <button
-                                onClick={() => signOut({ callbackUrl: "/login" })}
-                                className="btn-header-login"
-                                style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", padding: "0 12px" }}
-                                title="Sign Out"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                            </button>
                         </div>
                     ) : (
                         <button
@@ -91,13 +83,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
             {/* ══ FOOTER (Desktop) ════════════════════════════════════════════════ */}
             <footer className="app-footer">
-                <div className="footer-brand">clipping house</div>
+                <div className="footer-brand">myclipping</div>
                 <nav className="footer-nav">
                     {NAV_LINKS.map(({ label, href }) => (
                         <Link key={href} href={href} className="footer-nav-link">
                             {label}
                         </Link>
                     ))}
+                    {status === "authenticated" && (
+                        <button onClick={() => signOut({ callbackUrl: "/login" })} className="footer-nav-link" style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-serif)", fontSize: "1.15rem" }}>
+                            Sign Out
+                        </button>
+                    )}
                 </nav>
             </footer>
 
