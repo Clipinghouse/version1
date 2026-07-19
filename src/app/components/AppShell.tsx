@@ -22,7 +22,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <header className="app-header">
                 {/* Mobile Logo */}
                 <div className="mobile-logo">
-                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "28px", width: "auto", objectFit: "contain" }} />
+                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "33px", width: "auto", objectFit: "contain", marginTop: "1px" }} />
                 </div>
 
                 {/* Desktop Nav Links */}
