@@ -86,7 +86,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             {/* ══ FOOTER (Desktop) ════════════════════════════════════════════════ */}
             <footer className="app-footer">
                 <div className="footer-brand">
-                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "50px", width: "auto", objectFit: "contain" }} />
                 </div>
                 <nav className="footer-nav">
                     {NAV_LINKS.map(({ label, href }) => (
