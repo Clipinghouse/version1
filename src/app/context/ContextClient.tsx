@@ -256,19 +256,19 @@ export default function ContextClient({ initialCategories, identities }: { initi
                                     )}
 
                                     {/* Header Section */}
-                                    <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20 }}>
-                                        <div style={{ flex: 1 }}>
-                                            <h3 style={{ fontFamily: "var(--font-anton)", fontSize: isExpanded ? "2.5rem" : "1.8rem", color: "#fff", margin: 0, textTransform: "uppercase", letterSpacing: "0.02em", transition: "font-size 0.3s" }}>{cat.name}</h3>
+                                    <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <h3 style={{ fontFamily: "var(--font-anton)", fontSize: isExpanded ? "clamp(1.4rem, 5vw, 2.5rem)" : "1.8rem", color: "#fff", margin: 0, textTransform: "uppercase", letterSpacing: "0.02em", transition: "font-size 0.3s", overflowWrap: "break-word", wordBreak: "break-word" }}>{cat.name}</h3>
                                             {cat.description && <p style={{ color: "#777", fontSize: "0.85rem", marginTop: "12px", fontFamily: "var(--font-sans)", lineHeight: 1.5, maxWidth: "600px" }}>{cat.description}</p>}
                                         </div>
 
                                         {/* Actions */}
                                         {isExpanded ? (
-                                            <div style={{ display: "flex", gap: "12px" }}>
-                                                <button onClick={(e) => { e.stopPropagation(); handleDeleteCategory(cat.id); }} style={{ background: "transparent", border: "1px solid rgba(255,100,100,0.2)", borderRadius: "10px", width: "36px", height: "36px", color: "#ff6b6b", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,100,100,0.1)"} onMouseOut={e => e.currentTarget.style.background = "transparent"}>
+                                            <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+                                                <button onClick={(e) => { e.stopPropagation(); handleDeleteCategory(cat.id); }} style={{ background: "transparent", border: "1px solid rgba(255,100,100,0.2)", borderRadius: "10px", width: "34px", height: "34px", color: "#ff6b6b", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,100,100,0.1)"} onMouseOut={e => e.currentTarget.style.background = "transparent"}>
                                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                                 </button>
-                                                <button onClick={(e) => { e.stopPropagation(); setSelectedCatId(null); }} style={{ background: "#222", border: "none", borderRadius: "10px", width: "36px", height: "36px", color: "#fff", cursor: "pointer", transition: "0.2s" }} onMouseOver={e => e.currentTarget.style.background = "#333"} onMouseOut={e => e.currentTarget.style.background = "#222"}>✕</button>
+                                                <button onClick={(e) => { e.stopPropagation(); setSelectedCatId(null); }} style={{ background: "#222", border: "none", borderRadius: "10px", width: "34px", height: "34px", color: "#fff", cursor: "pointer", transition: "0.2s", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem" }} onMouseOver={e => e.currentTarget.style.background = "#333"} onMouseOut={e => e.currentTarget.style.background = "#222"}>✕</button>
                                             </div>
                                         ) : (
                                             <div style={{ background: "#222", borderRadius: "50%", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}>
