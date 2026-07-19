@@ -110,7 +110,7 @@ export default function ContextClient({ initialCategories, identities }: { initi
                     </div>
 
                     {/* Header */}
-                    <div className="campaign-header">
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "12px", paddingBottom: "32px" }}>
                         <div className="campaign-header-left">
                             <div className="avatar-group">
                                 {activeIdentities.length === 0 && (
@@ -134,18 +134,24 @@ export default function ContextClient({ initialCategories, identities }: { initi
                                 ))}
                             </div>
                         </div>
-                        <div className="campaign-header-right">
-                            {/* Search bar replaces the old filter icon */}
+                        {/* Right side: Search + Add button — wraps gracefully on mobile */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                             <div style={{ position: "relative" }}>
                                 <svg style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.35)", pointerEvents: "none" }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                                 <input
                                     value={search}
                                     onChange={e => setSearch(e.target.value)}
                                     placeholder="Search context…"
-                                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 24, padding: "10px 16px 10px 38px", color: "#fff", fontFamily: "var(--font-sans)", fontSize: "0.88rem", outline: "none", width: 200, transition: "border-color 0.2s" }}
+                                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 24, padding: "9px 16px 9px 38px", color: "#fff", fontFamily: "var(--font-sans)", fontSize: "0.85rem", outline: "none", width: "min(160px, 40vw)", transition: "border-color 0.2s" }}
                                 />
                             </div>
-                            <button className="campaign-add-btn" onClick={() => setIsCreating(true)}>+ Add Category</button>
+                            <button
+                                className="campaign-add-btn neutral"
+                                onClick={() => setIsCreating(true)}
+                                style={{ whiteSpace: "nowrap", padding: "0 14px", height: "38px", fontSize: "0.8rem", borderRadius: "20px" }}
+                            >
+                                + Add Category
+                            </button>
                         </div>
                     </div>
 
