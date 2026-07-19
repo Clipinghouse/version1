@@ -300,26 +300,32 @@ export default function ContextClient({ initialCategories, identities }: { initi
                                         <div style={{ marginTop: "32px", borderTop: "1px solid #1a1a1a", paddingTop: "32px", animation: "fadeIn 0.3s ease" }}>
 
                                             {/* Action Bar */}
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
-                                                <h4 style={{ margin: 0, color: "#888", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>Context Data Library</h4>
+                                            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "12px", marginBottom: 28 }}>
+                                                <h4 style={{ margin: 0, color: "rgba(255,255,255,0.4)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", fontFamily: "var(--font-sans)" }}>Context Data Library</h4>
 
                                                 {!addingContextId && (
-                                                    <button className="campaign-add-btn neutral" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "10px 20px", borderRadius: "10px", background: "#fff", color: "#000", border: "none", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }} onClick={() => { setAddingContextId(cat.id); setNewContextText(""); }}>
-                                                        + ADD CONTEXT
+                                                    <button
+                                                        onClick={() => { setAddingContextId(cat.id); setNewContextText(""); }}
+                                                        style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", borderRadius: "20px", background: "#fff", color: "#000", border: "none", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", fontFamily: "var(--font-sans)", letterSpacing: "0.04em", whiteSpace: "nowrap", transition: "background 0.2s" }}
+                                                        onMouseOver={e => (e.currentTarget.style.background = "#e0e0e0")}
+                                                        onMouseOut={e => (e.currentTarget.style.background = "#fff")}
+                                                    >
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                                                        Add Context
                                                     </button>
                                                 )}
                                             </div>
 
                                             {/* Inline Add Action */}
                                             {addingContextId === cat.id && (
-                                                <div style={{ marginBottom: 32, padding: 24, background: "rgba(255,255,255,0.02)", border: "1px solid #333", borderRadius: 16 }}>
-                                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16 }}>
-                                                        <input className="premium-input" style={{ background: "#050505", border: "1px solid #333" }} placeholder="Context Label (e.g. Rule 1)..." value={newContextName} onChange={e => setNewContextName(e.target.value)} autoFocus />
-                                                        <input className="premium-input" style={{ background: "#050505", border: "1px solid #333" }} placeholder="Context data or prompt instruction..." value={newContextText} onChange={e => setNewContextText(e.target.value)} onKeyDown={e => e.key === "Enter" && handleAddContext(cat.id)} />
+                                                <div style={{ marginBottom: 28, padding: "20px", background: "rgba(255,255,255,0.02)", border: "1px solid #2a2a2a", borderRadius: 14 }}>
+                                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12 }}>
+                                                        <input className="premium-input" style={{ background: "#050505", border: "1px solid #333" }} placeholder="Label (e.g. Rule 1)" value={newContextName} onChange={e => setNewContextName(e.target.value)} autoFocus />
+                                                        <input className="premium-input" style={{ background: "#050505", border: "1px solid #333" }} placeholder="Context data or instruction…" value={newContextText} onChange={e => setNewContextText(e.target.value)} onKeyDown={e => e.key === "Enter" && handleAddContext(cat.id)} />
                                                     </div>
-                                                    <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", marginTop: 16 }}>
-                                                        <button style={{ background: "transparent", color: "#888", padding: "8px 16px", border: "1px solid #333", borderRadius: "8px", cursor: "pointer", fontFamily: "var(--font-sans)", fontWeight: 600 }} onClick={() => setAddingContextId(null)}>CANCEL</button>
-                                                        <button style={{ background: "#fff", color: "#000", padding: "8px 24px", borderRadius: "8px", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontWeight: 700 }} onClick={() => handleAddContext(cat.id)}>SAVE</button>
+                                                    <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 14 }}>
+                                                        <button style={{ background: "transparent", color: "#666", padding: "7px 14px", border: "1px solid #2a2a2a", borderRadius: "8px", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 600 }} onClick={() => setAddingContextId(null)}>Cancel</button>
+                                                        <button style={{ background: "#fff", color: "#000", padding: "7px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 700 }} onClick={() => handleAddContext(cat.id)}>Save</button>
                                                     </div>
                                                 </div>
                                             )}
