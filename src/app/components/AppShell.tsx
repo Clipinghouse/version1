@@ -22,7 +22,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <header className="app-header">
                 {/* Mobile Logo */}
                 <div className="mobile-logo">
-                    <img src="/myclipping_fav_icon.png" alt="MyClipping" style={{ height: "28px", width: "auto", objectFit: "contain" }} />
+                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "28px", width: "auto", objectFit: "contain" }} />
                 </div>
 
                 {/* Desktop Nav Links */}
@@ -86,7 +86,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             {/* ══ FOOTER (Desktop) ════════════════════════════════════════════════ */}
             <footer className="app-footer">
                 <div className="footer-brand">
-                    <img src="/myclipping_fav_icon.png" alt="MyClipping" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+                    <img src="/myclipping.png" alt="MyClipping" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
                 </div>
                 <nav className="footer-nav">
                     {NAV_LINKS.map(({ label, href }) => (
